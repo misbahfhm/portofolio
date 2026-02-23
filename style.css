@@ -1,58 +1,121 @@
-body {
-    font-family: Arial, sans-serif;
+/* RESET */
+* {
     margin: 0;
-    background-color: #f4f6f9;
-    color: #333;
+    padding: 0;
+    box-sizing: border-box;
 }
 
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: #0b0f19;
+    color: #e6edf3;
+    overflow-x: hidden;
+}
+
+/* BACKGROUND GRADIENT */
+.background {
+    position: fixed;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 20% 30%, rgba(56,189,248,0.15), transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(139,92,246,0.15), transparent 40%);
+    animation: moveBg 20s infinite alternate ease-in-out;
+    z-index: -1;
+}
+
+@keyframes moveBg {
+    from { transform: translate(0,0); }
+    to { transform: translate(-5%, -5%); }
+}
+
+/* HEADER */
 header {
-    background-color: #111827;
-    color: white;
     text-align: center;
-    padding: 40px 20px;
+    padding: 120px 20px 40px 20px;
 }
 
+header h1 {
+    font-size: 3rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+header p {
+    margin-top: 20px;
+    font-size: 1.2rem;
+    opacity: 0.8;
+    height: 30px;
+}
+
+/* NAVIGATION */
 nav {
-    background-color: #1f2937;
-    text-align: center;
-    padding: 15px;
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    margin-bottom: 60px;
+    flex-wrap: wrap;
 }
 
 nav a {
-    color: white;
     text-decoration: none;
-    margin: 0 15px;
-    font-weight: bold;
+    color: #e6edf3;
+    padding: 10px 20px;
+    border-radius: 30px;
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
 }
 
 nav a:hover {
-    color: #60a5fa;
+    background: rgba(56,189,248,0.2);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(56,189,248,0.2);
 }
 
-section {
-    padding: 40px;
-    max-width: 1000px;
+/* ABOUT */
+.about {
+    max-width: 800px;
     margin: auto;
+    padding: 50px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 20px;
+    backdrop-filter: blur(20px);
+    text-align: center;
 }
 
-.project-card {
-    background: white;
-    padding: 25px;
-    margin-bottom: 25px;
-    border-radius: 8px;
-    box-shadow: 0px 4px 10px rgba(0,0,0,0.05);
+.about h2 {
+    margin-bottom: 20px;
+    font-size: 2rem;
 }
 
-.project-card h3 {
-    margin-top: 0;
+.about p {
+    line-height: 1.7;
+    opacity: 0.9;
 }
 
-.project-section {
-    margin-top: 15px;
+/* FOOTER */
+footer {
+    text-align: center;
+    margin-top: 100px;
+    padding: 30px;
+    opacity: 0.5;
 }
 
-.screenshot img {
-    width: 200px;
-    margin: 10px;
-    border-radius: 5px;
+/* FADE ANIMATION */
+.fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 1s forwards ease-out;
+}
+
+.delay-1 { animation-delay: 0.3s; }
+.delay-2 { animation-delay: 0.6s; }
+.delay-3 { animation-delay: 0.9s; }
+
+@keyframes fadeUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
