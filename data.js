@@ -17,7 +17,7 @@ const projectsData = [
         "assets/company/xquisite_analitika_indonesia/Voyager/5.png",
         "assets/company/xquisite_analitika_indonesia/Voyager/6.png",
         "assets/company/xquisite_analitika_indonesia/Voyager/7.png",
-        "assets/company/xquisite_analitika_indonesia/Voyager/8.png",
+        "assets/company/xquisite_analitika_indonesia/Voyager/8.png"
     ]
 },
 
