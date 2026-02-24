@@ -190,3 +190,17 @@ footer {
     font-size: 28px;
     cursor: pointer;
 }
+
+.fade-switch {
+    transition: all 0.4s ease;
+}
+
+.fade-out {
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.fade-in-content {
+    opacity: 1;
+    transform: translateY(0);
+}

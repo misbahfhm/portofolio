@@ -1,4 +1,4 @@
-const projects = [
+const projectsData = [
 
 {
     type: "company",

@@ -96,3 +96,79 @@ window.addEventListener("resize", () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 });
+
+const container = document.getElementById("projects-container");
+
+function renderProjects(filter = "all") {
+    container.innerHTML = "";
+
+    const filtered = filter === "all"
+        ? projects
+        : projects.filter(p => p.type === filter);
+
+    filtered.forEach(project => {
+        const card = document.createElement("div");
+        card.className = "project-card";
+        card.innerHTML = `
+            <h3>${project.title}</h3>
+            <p>${project.overview || ''}</p>
+        `;
+        card.onclick = () => openModal(project);
+        container.appendChild(card);
+    });
+}
+
+function filterProjects(type) {
+    renderProjects(type);
+}
+
+function openModal(project) {
+    const modal = document.getElementById("project-modal");
+    const body = document.getElementById("modal-body");
+
+    body.innerHTML = `
+        <h2>${project.title}</h2>
+        <p>${project.overview || ''}</p>
+        <p><strong>Skills:</strong> ${project.skills || ''}</p>
+        <p><strong>Tools:</strong> ${project.tools || ''}</p>
+    `;
+
+    modal.style.display = "block";
+}
+
+function closeModal() {
+    document.getElementById("project-modal").style.display = "none";
+}
+
+renderProjects();
+
+function showProjects(type) {
+
+    const section = document.getElementById("dynamic-content");
+    section.classList.add("fade-out");
+
+    setTimeout(() => {
+
+        const data = projectsData[type];
+
+        let html = `<h2>${type.toUpperCase()}</h2>`;
+
+        data.forEach(project => {
+
+            html += `<div class="project-card">`;
+
+            if (project.title) html += `<h3>${project.title}</h3>`;
+            if (project.project_overview) html += `<p>${project.project_overview}</p>`;
+            if (project.competition_overview) html += `<p>${project.competition_overview}</p>`;
+            if (project.thesis_title) html += `<h3>${project.thesis_title}</h3>`;
+            if (project.academy_overview) html += `<p>${project.academy_overview}</p>`;
+
+            html += `</div>`;
+        });
+
+        section.innerHTML = html;
+
+        section.classList.remove("fade-out");
+
+    }, 300);
+}

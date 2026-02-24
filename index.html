@@ -16,14 +16,16 @@
 </header>
 
 <nav class="nav-links">
-    <a href="#">Company Projects</a>
-    <a href="#">Competitions</a>
-    <a href="#">Thesis Research</a>
-    <a href="#">Academy</a>
-    <a href="#">Certifications</a>
+    <nav class="nav-links">
+    <a href="#" onclick="showProjects('company')">Company Projects</a>
+    <a href="#" onclick="showProjects('competition')">Competitions</a>
+    <a href="#" onclick="showProjects('thesis')">Thesis Research</a>
+    <a href="#" onclick="showProjects('academy')">Academy</a>
+    <a href="#" onclick="showProjects('certification')">Certifications</a>
+</nav>
 </nav>
 
-<section class="about glass">
+<section id="dynamic-content" class="glass fade-switch">
     <h2>About Me</h2>
     <p>
         AI Engineer with 4+ years of experience building scalable AI & ML systems
@@ -37,6 +39,7 @@
     <p>© 2026 Misbah Fahamsyah</p>
 </footer>
 
+<script src="data.js"></script>
 <script src="script.js"></script>
 </body>
 </html>
