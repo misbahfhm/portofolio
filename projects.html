@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projects | Misbah Fahamsyah</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<canvas id="network"></canvas>
+
+<header class="hero-small">
+    <h1 class="glow-text">Projects Portfolio</h1>
+</header>
+
+<section class="filter-section">
+    <button onclick="filterProjects('all')">All</button>
+    <button onclick="filterProjects('company')">Company</button>
+    <button onclick="filterProjects('competition')">Competition</button>
+    <button onclick="filterProjects('thesis')">Thesis</button>
+    <button onclick="filterProjects('academy')">Academy</button>
+    <button onclick="filterProjects('certification')">Certification</button>
+</section>
+
+<section id="projects-container" class="projects-grid">
+</section>
+
+<div id="project-modal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <div id="modal-body"></div>
+    </div>
+</div>
+
+<script src="data.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
