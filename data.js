@@ -10,14 +10,14 @@ const projectsData = [
     skills: "MLOps, Automation, AI, Machine Learning, Cloud Infrastructure (AWS), CI/CD Pipeline, Infrastructure as Code, Solution Architecture, Software Engineering Fundamentals",
     tools: "Python, Docker, GitLab, AWS CloudFormation, Terraform, AWS CodePipeline, AWS CodeBuild, AWS Lambda, AWS ECS, AWS EventBridge, AWS API Gateway, AWS Bedrock, AWS Transcribe, AWS Polly, AWS S3",
     evidence: [
-        "assets/company/xquisite_analitika_indonesia/Voyager/1.png", 
-        "assets/company/xquisite_analitika_indonesia/Voyager/2.png",
-        "assets/company/xquisite_analitika_indonesia/Voyager/3.png",
-        "assets/company/xquisite_analitika_indonesia/Voyager/4.png",
-        "assets/company/xquisite_analitika_indonesia/Voyager/5.png",
-        "assets/company/xquisite_analitika_indonesia/Voyager/6.png",
-        "assets/company/xquisite_analitika_indonesia/Voyager/7.png",
-        "assets/company/xquisite_analitika_indonesia/Voyager/8.png"
+        "assets/company/xquisite_analitika_indonesia/voyager/1.png", 
+        "assets/company/xquisite_analitika_indonesia/voyager/2.png",
+        "assets/company/xquisite_analitika_indonesia/voyager/3.png",
+        "assets/company/xquisite_analitika_indonesia/voyager/4.png",
+        "assets/company/xquisite_analitika_indonesia/voyager/5.png",
+        "assets/company/xquisite_analitika_indonesia/voyager/6.png",
+        "assets/company/xquisite_analitika_indonesia/voyager/7.png",
+        "assets/company/xquisite_analitika_indonesia/voyager/8.png"
     ]
 },
 

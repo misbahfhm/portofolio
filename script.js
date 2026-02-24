@@ -135,6 +135,16 @@ function showProjects(type) {
             if (project.tools)
                 html += `<p><strong>Tools:</strong> ${project.tools}</p>`;
 
+            if (project.evidence && project.evidence.length > 0) {
+                html += `<div class="evidence-gallery">`;
+
+                project.evidence.forEach(img => {
+                    html += `<img src="${img}" class="evidence-img" alt="Project Evidence">`;
+                });
+
+                html += `</div>`;
+            }
+
             html += `</div>`;
         });
 

@@ -204,3 +204,21 @@ footer {
     opacity: 1;
     transform: translateY(0);
 }
+
+.evidence-gallery {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.evidence-img {
+    width: 180px;
+    border-radius: 8px;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.evidence-img:hover {
+    transform: scale(1.05);
+}
