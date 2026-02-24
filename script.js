@@ -153,3 +153,6 @@ function showProjects(type) {
 
     }, 300);
 }
+showProjects("company");
+showProjects("competition");
+showProjects("thesis");
