@@ -16,204 +16,334 @@ window.onload = typeEffect;
 
 
 /* =========================
-   FUTURISTIC AI CANVAS
+   CIRCUIT BOARD BACKGROUND
 ========================= */
 const canvas = document.getElementById("network");
 const ctx    = canvas.getContext("2d");
 let W = canvas.width  = window.innerWidth;
 let H = canvas.height = window.innerHeight;
 
-// ── Nodes (neural network neurons) ──
-const NODE_COUNT  = 70;
-const LINK_DIST   = 160;
-const nodes = [];
+const COLORS = {
+    sky:    [56,  189, 248],
+    violet: [129, 140, 248],
+    mint:   [52,  211, 153],
+    gold:   [251, 191, 36],
+};
+const COLOR_LIST = Object.values(COLORS);
 
-class Node {
-    constructor() { this.init(); }
-    init() {
-        this.x      = Math.random() * W;
-        this.y      = Math.random() * H;
-        this.vx     = (Math.random() - 0.5) * 0.45;
-        this.vy     = (Math.random() - 0.5) * 0.45;
-        this.r      = Math.random() * 2 + 1;
-        this.pulse  = Math.random() * Math.PI * 2; // phase offset
-        this.active = Math.random() < 0.2;          // some nodes "fire"
-    }
-    update() {
-        this.x += this.vx;
-        this.y += this.vy;
-        if (this.x < 0 || this.x > W) this.vx *= -1;
-        if (this.y < 0 || this.y > H) this.vy *= -1;
-        this.pulse += 0.035;
-        // randomly trigger firing
-        if (Math.random() < 0.0008) this.active = true;
-        if (this.active && Math.random() < 0.02) this.active = false;
-    }
-    draw(t) {
-        const glow = this.active ? 1 : 0.45 + 0.3 * Math.sin(this.pulse);
-        const col  = this.active ? "56,189,248" : "100,160,255";
-        // outer glow ring
-        if (this.active) {
-            const ring = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.r * 10);
-            ring.addColorStop(0,   `rgba(56,189,248,0.35)`);
-            ring.addColorStop(1,   `rgba(56,189,248,0)`);
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, this.r * 10, 0, Math.PI * 2);
-            ctx.fillStyle = ring;
-            ctx.fill();
+function rgba(c, a) { return `rgba(${c[0]},${c[1]},${c[2]},${a})`; }
+function lerp(a, b, t) { return a + (b - a) * t; }
+function rand(min, max) { return Math.random() * (max - min) + min; }
+function randInt(min, max) { return Math.floor(rand(min, max + 1)); }
+function pickColor() { return COLOR_LIST[randInt(0, COLOR_LIST.length - 1)]; }
+
+
+/* ── Grid settings ───────────────────────────────────── */
+const CELL = 38;   // grid cell size in px
+let COLS, ROWS;
+let grid = [];     // grid[row][col] = node data
+
+function buildGrid() {
+    COLS = Math.ceil(W / CELL) + 2;
+    ROWS = Math.ceil(H / CELL) + 2;
+    grid = [];
+    for (let r = 0; r < ROWS; r++) {
+        grid[r] = [];
+        for (let c = 0; c < COLS; c++) {
+            grid[r][c] = {
+                x:       c * CELL,
+                y:       r * CELL,
+                active:  Math.random() < 0.55,   // whether this node is part of circuit
+                dot:     Math.random() < 0.18,   // solder dot
+                color:   pickColor(),
+            };
         }
-        // core dot
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(${col},${glow})`;
-        ctx.fill();
     }
 }
+buildGrid();
 
-for (let i = 0; i < NODE_COUNT; i++) nodes.push(new Node());
+
+/* ── Trace segments (horizontal + vertical paths) ───── */
+// A trace goes from node A → node B along grid lines
+const traces = [];
+
+function buildTraces() {
+    traces.length = 0;
+    for (let r = 0; r < ROWS; r++) {
+        for (let c = 0; c < COLS - 1; c++) {
+            if (grid[r][c].active && grid[r][c + 1].active && Math.random() < 0.48) {
+                traces.push({
+                    x1: grid[r][c].x,     y1: grid[r][c].y,
+                    x2: grid[r][c+1].x,   y2: grid[r][c].y,
+                    color: grid[r][c].color,
+                    alpha: rand(0.06, 0.18),
+                });
+            }
+        }
+    }
+    for (let r = 0; r < ROWS - 1; r++) {
+        for (let c = 0; c < COLS; c++) {
+            if (grid[r][c].active && grid[r+1][c].active && Math.random() < 0.48) {
+                traces.push({
+                    x1: grid[r][c].x,   y1: grid[r][c].y,
+                    x2: grid[r][c].x,   y2: grid[r+1][c].y,
+                    color: grid[r][c].color,
+                    alpha: rand(0.06, 0.18),
+                });
+            }
+        }
+    }
+}
+buildTraces();
 
 
-// ── Data pulses traveling along edges ──
-const pulses = [];
+/* ── Signal pulses traveling along traces ────────────── */
+const signals = [];
+const MAX_SIGNALS = 55;
 
-class Pulse {
-    constructor(from, to) {
-        this.from   = from;
-        this.to     = to;
-        this.t      = 0;         // 0 → 1 progress
-        this.speed  = 0.012 + Math.random() * 0.018;
-        this.active = true;
+class Signal {
+    constructor() { this.spawn(); }
+    spawn() {
+        // pick a random trace to travel on
+        if (traces.length === 0) return;
+        const tr   = traces[randInt(0, traces.length - 1)];
+        this.x1    = tr.x1; this.y1 = tr.y1;
+        this.x2    = tr.x2; this.y2 = tr.y2;
+        this.t     = 0;
+        this.speed = rand(0.004, 0.014);
+        this.color = tr.color;
+        this.size  = rand(2.5, 5);
+        this.tail  = rand(0.12, 0.28);   // tail length as fraction of trace
+        this.alive = true;
+        this.glow  = rand(0.7, 1.0);
     }
     update() {
         this.t += this.speed;
-        if (this.t >= 1) this.active = false;
+        if (this.t >= 1 + this.tail) { this.alive = false; }
     }
     draw() {
-        const x = this.from.x + (this.to.x - this.from.x) * this.t;
-        const y = this.from.y + (this.to.y - this.from.y) * this.t;
-        const trail = ctx.createRadialGradient(x, y, 0, x, y, 6);
-        trail.addColorStop(0,   "rgba(56,189,248,0.95)");
-        trail.addColorStop(0.4, "rgba(129,140,248,0.5)");
-        trail.addColorStop(1,   "rgba(56,189,248,0)");
+        const head = Math.min(this.t, 1);
+        const tail = Math.max(this.t - this.tail, 0);
+
+        const hx = lerp(this.x1, this.x2, head);
+        const hy = lerp(this.y1, this.y2, head);
+        const tx = lerp(this.x1, this.x2, tail);
+        const ty = lerp(this.y1, this.y2, tail);
+
+        // tail gradient line
+        const grad = ctx.createLinearGradient(tx, ty, hx, hy);
+        grad.addColorStop(0,   rgba(this.color, 0));
+        grad.addColorStop(0.6, rgba(this.color, 0.35 * this.glow));
+        grad.addColorStop(1,   rgba(this.color, 0.9 * this.glow));
         ctx.beginPath();
-        ctx.arc(x, y, 6, 0, Math.PI * 2);
-        ctx.fillStyle = trail;
-        ctx.fill();
-    }
-}
+        ctx.strokeStyle = grad;
+        ctx.lineWidth   = this.size * 0.6;
+        ctx.lineCap     = "round";
+        ctx.moveTo(tx, ty);
+        ctx.lineTo(hx, hy);
+        ctx.stroke();
 
-
-// ── Floating hex grid (subtle) ──
-function drawHexGrid() {
-    const size    = 55;
-    const cols    = Math.ceil(W / (size * 1.73)) + 2;
-    const rows    = Math.ceil(H / (size * 1.5))  + 2;
-    ctx.strokeStyle = "rgba(56,189,248,0.028)";
-    ctx.lineWidth   = 0.8;
-    for (let r = -1; r < rows; r++) {
-        for (let c = -1; c < cols; c++) {
-            const offset = c % 2 === 0 ? 0 : size * 0.75;
-            const cx = c * size * 1.73 * 0.5;
-            const cy = r * size * 1.5 + offset;
+        // glowing head dot
+        if (this.t <= 1) {
+            const g = ctx.createRadialGradient(hx, hy, 0, hx, hy, this.size * 3);
+            g.addColorStop(0,   rgba(this.color, 0.9 * this.glow));
+            g.addColorStop(0.4, rgba(this.color, 0.35 * this.glow));
+            g.addColorStop(1,   rgba(this.color, 0));
             ctx.beginPath();
-            for (let i = 0; i < 6; i++) {
-                const angle = (Math.PI / 3) * i - Math.PI / 6;
-                const px = cx + size * 0.5 * Math.cos(angle);
-                const py = cy + size * 0.5 * Math.sin(angle);
-                i === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
-            }
-            ctx.closePath();
-            ctx.stroke();
+            ctx.arc(hx, hy, this.size * 3, 0, Math.PI * 2);
+            ctx.fillStyle = g;
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.arc(hx, hy, this.size * 0.55, 0, Math.PI * 2);
+            ctx.fillStyle = rgba(this.color, this.glow);
+            ctx.fill();
         }
     }
 }
 
-
-// ── Scanline sweep ──
-let scanY = 0;
-function drawScanline() {
-    scanY = (scanY + 0.6) % H;
-    const grad = ctx.createLinearGradient(0, scanY - 40, 0, scanY + 40);
-    grad.addColorStop(0,   "rgba(56,189,248,0)");
-    grad.addColorStop(0.5, "rgba(56,189,248,0.04)");
-    grad.addColorStop(1,   "rgba(56,189,248,0)");
-    ctx.fillStyle = grad;
-    ctx.fillRect(0, scanY - 40, W, 80);
+for (let i = 0; i < MAX_SIGNALS; i++) {
+    const s = new Signal();
+    s.t = Math.random();   // stagger start
+    signals.push(s);
 }
 
 
-// ── Corner brackets ──
-function drawCorners() {
-    const s = 36, m = 22;
-    ctx.strokeStyle = "rgba(56,189,248,0.35)";
-    ctx.lineWidth   = 1.5;
-    const corners = [
-        [m, m, 1, 1], [W - m, m, -1, 1],
-        [m, H - m, 1, -1], [W - m, H - m, -1, -1]
-    ];
-    corners.forEach(([x, y, dx, dy]) => {
+/* ── Pulsing solder dots ─────────────────────────────── */
+const dots = [];
+
+function buildDots() {
+    dots.length = 0;
+    for (let r = 0; r < ROWS; r++) {
+        for (let c = 0; c < COLS; c++) {
+            if (grid[r][c].active && grid[r][c].dot) {
+                dots.push({
+                    x:     grid[r][c].x,
+                    y:     grid[r][c].y,
+                    color: grid[r][c].color,
+                    phase: rand(0, Math.PI * 2),
+                    r:     rand(2.5, 5),
+                });
+            }
+        }
+    }
+}
+buildDots();
+
+function drawDots(t) {
+    dots.forEach(d => {
+        const pulse = 0.25 + 0.2 * Math.sin(d.phase + t * 0.018);
+        // outer glow
+        const g = ctx.createRadialGradient(d.x, d.y, 0, d.x, d.y, d.r * 5);
+        g.addColorStop(0,   rgba(d.color, pulse * 0.5));
+        g.addColorStop(1,   rgba(d.color, 0));
         ctx.beginPath();
-        ctx.moveTo(x, y + dy * s);
-        ctx.lineTo(x, y);
-        ctx.lineTo(x + dx * s, y);
+        ctx.arc(d.x, d.y, d.r * 5, 0, Math.PI * 2);
+        ctx.fillStyle = g;
+        ctx.fill();
+        // core
+        ctx.beginPath();
+        ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
+        ctx.fillStyle = rgba(d.color, 0.55 + 0.2 * Math.sin(d.phase + t * 0.018));
+        ctx.fill();
+    });
+}
+
+
+/* ── Draw static traces ──────────────────────────────── */
+function drawTraces() {
+    traces.forEach(tr => {
+        ctx.beginPath();
+        ctx.strokeStyle = rgba(tr.color, tr.alpha);
+        ctx.lineWidth   = 1.2;
+        ctx.lineCap     = "square";
+        ctx.moveTo(tr.x1, tr.y1);
+        ctx.lineTo(tr.x2, tr.y2);
         ctx.stroke();
     });
 }
 
 
-// ── Main animation loop ──
+/* ── Ambient glow blobs ──────────────────────────────── */
+const blobs = [
+    { x: W * 0.15, y: H * 0.2,  r: 480, color: COLORS.violet, phase: 0    },
+    { x: W * 0.85, y: H * 0.75, r: 420, color: COLORS.sky,    phase: 2.09 },
+    { x: W * 0.5,  y: H * 0.5,  r: 380, color: COLORS.mint,   phase: 4.18 },
+];
+
+function drawBlobs(t) {
+    blobs.forEach(b => {
+        const a = 0.028 + 0.012 * Math.sin(b.phase + t * 0.006);
+        const g = ctx.createRadialGradient(b.x, b.y, 0, b.x, b.y, b.r);
+        g.addColorStop(0,   rgba(b.color, a));
+        g.addColorStop(0.5, rgba(b.color, a * 0.4));
+        g.addColorStop(1,   rgba(b.color, 0));
+        ctx.beginPath();
+        ctx.arc(b.x, b.y, b.r, 0, Math.PI * 2);
+        ctx.fillStyle = g;
+        ctx.fill();
+    });
+}
+
+
+/* ── IC chip rectangles ──────────────────────────────── */
+const chips = [];
+
+function buildChips() {
+    chips.length = 0;
+    const count = randInt(6, 10);
+    for (let i = 0; i < count; i++) {
+        const cw = randInt(3, 6) * CELL;
+        const ch = randInt(2, 4) * CELL;
+        const cx = randInt(1, COLS - 5) * CELL;
+        const cy = randInt(1, ROWS - 4) * CELL;
+        chips.push({
+            x: cx, y: cy, w: cw, h: ch,
+            color: pickColor(),
+            phase: rand(0, Math.PI * 2),
+        });
+    }
+}
+buildChips();
+
+function drawChips(t) {
+    chips.forEach(ch => {
+        const a = 0.08 + 0.04 * Math.sin(ch.phase + t * 0.012);
+        ctx.strokeStyle = rgba(ch.color, a);
+        ctx.lineWidth   = 1;
+        ctx.strokeRect(ch.x, ch.y, ch.w, ch.h);
+
+        // inner cross lines
+        ctx.beginPath();
+        ctx.strokeStyle = rgba(ch.color, a * 0.5);
+        ctx.moveTo(ch.x + ch.w / 2, ch.y);
+        ctx.lineTo(ch.x + ch.w / 2, ch.y + ch.h);
+        ctx.moveTo(ch.x, ch.y + ch.h / 2);
+        ctx.lineTo(ch.x + ch.w, ch.y + ch.h / 2);
+        ctx.stroke();
+    });
+}
+
+
+/* ── HUD corners ─────────────────────────────────────── */
+function drawHUD(t) {
+    const s = 40, m = 22;
+    const a = 0.3 + 0.08 * Math.sin(t * 0.025);
+    ctx.strokeStyle = rgba(COLORS.sky, a);
+    ctx.lineWidth   = 1.2;
+
+    [[m,m,1,1],[W-m,m,-1,1],[m,H-m,1,-1],[W-m,H-m,-1,-1]].forEach(([x,y,dx,dy]) => {
+        ctx.beginPath();
+        ctx.moveTo(x, y + dy * s);
+        ctx.lineTo(x, y);
+        ctx.lineTo(x + dx * s, y);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.arc(x, y, 2, 0, Math.PI * 2);
+        ctx.fillStyle = rgba(COLORS.sky, a + 0.2);
+        ctx.fill();
+    });
+}
+
+
+/* ── Main loop ───────────────────────────────────────── */
 let frame = 0;
+
 function animate() {
     ctx.clearRect(0, 0, W, H);
 
-    // hex grid layer
-    drawHexGrid();
-    drawScanline();
+    drawBlobs(frame);
+    drawTraces();
+    drawChips(frame);
+    drawDots(frame);
 
-    // edges between nearby nodes
-    for (let i = 0; i < nodes.length; i++) {
-        for (let j = i + 1; j < nodes.length; j++) {
-            const dx   = nodes[i].x - nodes[j].x;
-            const dy   = nodes[i].y - nodes[j].y;
-            const dist = Math.sqrt(dx * dx + dy * dy);
-            if (dist < LINK_DIST) {
-                const alpha = (1 - dist / LINK_DIST) * 0.22;
-                ctx.beginPath();
-                ctx.strokeStyle = `rgba(100,140,255,${alpha})`;
-                ctx.lineWidth   = 0.8;
-                ctx.moveTo(nodes[i].x, nodes[i].y);
-                ctx.lineTo(nodes[j].x, nodes[j].y);
-                ctx.stroke();
-
-                // occasionally spawn a pulse on active-node edges
-                if (nodes[i].active && Math.random() < 0.003) {
-                    pulses.push(new Pulse(nodes[i], nodes[j]));
-                }
-            }
+    // update & draw signals
+    for (let i = signals.length - 1; i >= 0; i--) {
+        signals[i].update();
+        signals[i].draw();
+        if (!signals[i].alive) {
+            signals[i] = new Signal();   // respawn immediately
         }
     }
 
-    // update & draw nodes
-    nodes.forEach(n => { n.update(); n.draw(frame); });
-
-    // update & draw pulses
-    for (let i = pulses.length - 1; i >= 0; i--) {
-        pulses[i].update();
-        pulses[i].draw();
-        if (!pulses[i].active) pulses.splice(i, 1);
-    }
-
-    drawCorners();
+    drawHUD(frame);
 
     frame++;
     requestAnimationFrame(animate);
 }
+
 animate();
 
 window.addEventListener("resize", () => {
     W = canvas.width  = window.innerWidth;
     H = canvas.height = window.innerHeight;
-    nodes.forEach(n => n.init());
+    blobs[0].x = W * 0.15; blobs[0].y = H * 0.2;
+    blobs[1].x = W * 0.85; blobs[1].y = H * 0.75;
+    blobs[2].x = W * 0.5;  blobs[2].y = H * 0.5;
+    buildGrid();
+    buildTraces();
+    buildDots();
+    buildChips();
 });
 
 
@@ -286,6 +416,7 @@ imageModal.addEventListener("click", (e) => {
 ========================= */
 const badgeMap = {
     company:       { cls: "badge-company",       label: "Company Project" },
+    poc:           { cls: "badge-poc",            label: "Proof of Concept" },
     competition:   { cls: "badge-competition",   label: "Competition"     },
     thesis:        { cls: "badge-thesis",         label: "Thesis Research" },
     academy:       { cls: "badge-academy",        label: "Academy"         },
@@ -366,9 +497,11 @@ let currentType = null;
 
 function showProjects(type) {
     // update nav active state
+    document.getElementById("aboutBtn")?.classList.remove("active");
     document.querySelectorAll(".nav-links a").forEach(a => {
         a.classList.toggle("active", a.getAttribute("onclick")?.includes(`'${type}'`));
     });
+
 
     const section = document.getElementById("dynamic-content");
     section.classList.add("fade-out");
@@ -423,7 +556,10 @@ function buildCertificationView(section) {
 
 /* ─── PROJECTS VIEW ────────────────────────────────── */
 function buildProjectsView(type, section) {
-    const data   = projectsData.filter(p => p.type === type);
+    const data = type === "company"
+    ? projectsData.filter(p => p.type === "company" || p.type === "poc")
+    : projectsData.filter(p => p.type === type);
+
     const badge  = badgeMap[type] || { cls: "", label: type };
     const labels = {
         company:     "Projects",
@@ -446,23 +582,25 @@ function buildProjectsView(type, section) {
     html += `<div class="projects-grid">`;
 
     data.forEach(project => {
+        const cardBadge = badgeMap[project.type] || badge; 
         html += `<div class="project-card">`;
-        html += `<div class="card-badge ${badge.cls}">${badge.label}</div>`;
+        html += `<div class="card-badge ${cardBadge.cls}">${cardBadge.label}</div>`;
         html += `<h3>${project.title}</h3>`;
 
         // ─ Company type
         if (type === "company") {
             if (project.overview) {
                 const fmt = project.overview
+                    .replace(/Overview:/g, "<strong>Overview:</strong>")
                     .replace(/Problem:/g, "<strong>Problem:</strong>")
-                    .replace(/Solution:/g, "<strong>Solution:</strong>")
+                    .replace(/Delivered Solution:/g, "<strong>Delivered Solution:</strong>")
                     .replace(/Impact:/g, "<strong>Impact:</strong>")
                     .trim();
                 html += `<div class="overview-text">${fmt}</div>`;
             }
             if (project.role)              html += metaRow("Role", project.role);
-            if (project.organization)      html += metaRow("Organization", project.organization);
-            if (project.role_description)  html += metaRow("Description", project.role_description);
+            if (project.field)             html += metaRow("Field", project.field);
+            if (project.duration)          html += metaRow("Duration", project.duration);
             if (project.responsibilities)  html += metaRow("Responsibilities", project.responsibilities);
             if (project.skills)            html += metaRow("Skills", project.skills);
             if (project.tools)             html += metaRow("Tools", project.tools);
@@ -485,7 +623,7 @@ function buildProjectsView(type, section) {
         if (type === "thesis") {
             if (project.year)         html += metaRow("Year", project.year);
             if (project.level)        html += metaRow("Level", project.level);
-            if (project.organization) html += metaRow("University", project.organization);
+            if (project.institution)  html += metaRow("Institution", project.institution);
             if (project.objectives)   html += metaRow("Objectives", project.objectives);
             if (project.skills)       html += metaRow("Skills", project.skills);
             if (project.tools)        html += metaRow("Tools", project.tools);
@@ -520,18 +658,31 @@ function metaRow(label, value) {
     </div>`;
 }
 
+function showAbout() {
+    // clear active dari nav
+    document.querySelectorAll(".nav-links a").forEach(a => a.classList.remove("active"));
+    // set active di tombol about
+    document.getElementById("aboutBtn")?.classList.add("active");
+
+    const section = document.getElementById("dynamic-content");
+    section.classList.add("fade-out");
+
+    setTimeout(() => {
+        section.innerHTML = `
+            <div class="about-glass">
+                <h2>About Me</h2>
+                <p>AI Engineer with 4+ years of experience building scalable AI & ML systems
+                from development to production. Experienced across AI Engineering,
+                Data Science, Data Engineering, and MLOps. Delivering intelligent,
+                production-ready solutions with measurable impact.</p>
+            </div>`;
+        section.classList.remove("fade-out");
+    }, 300);
+}
 
 /* =========================
    INIT — default About view
 ========================= */
 (function init() {
-    const section = document.getElementById("dynamic-content");
-    section.innerHTML = `
-        <div class="about-glass">
-            <h2>About Me</h2>
-            <p>AI Engineer with 4+ years of experience building scalable AI & ML systems
-            from development to production. Experienced across AI Engineering,
-            Data Science, Data Engineering, and MLOps. Delivering intelligent,
-            production-ready solutions with measurable impact.</p>
-        </div>`;
+    showAbout();
 })();

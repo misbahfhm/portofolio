@@ -33,17 +33,22 @@
             <span class="typing-label">—</span>
             <span class="typing"></span>
         </div>
+
+        <!-- ← tambahkan ini -->
+        <div class="hero-about-btn">
+            <a href="#" onclick="showAbout(); return false;" id="aboutBtn">About Me</a>
+        </div>
     </header>
 
     <nav class="nav-links">
-        <a href="#" onclick="showProjects('company'); return false;">Company Projects</a>
+        <a href="#" onclick="showProjects('company'); return false;">Projects</a>
         <a href="#" onclick="showProjects('competition'); return false;">Competitions</a>
         <a href="#" onclick="showProjects('thesis'); return false;">Thesis Research</a>
         <a href="#" onclick="showProjects('academy'); return false;">Academy</a>
         <a href="#" onclick="showProjects('certification'); return false;">Certifications</a>
     </nav>
 
-    <section id="dynamic-content" class="fade-switch" style="max-width:1100px;margin:48px auto;padding:0 28px;transition:opacity 0.3s ease,transform 0.3s ease;">
+    <section id="dynamic-content" class="fade-switch">
         <!-- filled by JS -->
     </section>
 
