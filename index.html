@@ -6,37 +6,52 @@
     <title>Misbah Fahamsyah | AI Engineer</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
+
+<!-- LIGHTBOX -->
+<div id="imageModal" class="image-modal">
+    <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+    <div class="lightbox-inner">
+        <img class="lightbox-img" id="modalImage" alt="Evidence">
+        <div class="lightbox-nav">
+            <button class="lb-btn" onclick="lightboxPrev()">← Prev</button>
+            <span class="lb-count" id="lbCount">1 / 1</span>
+            <button class="lb-btn" onclick="lightboxNext()">Next →</button>
+        </div>
+    </div>
+</div>
 
 <canvas id="network"></canvas>
 
-<header class="hero">
-    <h1 class="glow-text">Misbah Fahamsyah</h1>
-    <p class="typing"></p>
-</header>
+<div class="page-wrap">
 
-<nav class="nav-links">
-    <a href="#" onclick="showProjects('company')">Company Projects</a>
-    <a href="#" onclick="showProjects('competition')">Competitions</a>
-    <a href="#" onclick="showProjects('thesis')">Thesis Research</a>
-    <a href="#" onclick="showProjects('academy')">Academy</a>
-    <a href="#" onclick="showProjects('certification')">Certifications</a>
-</nav>
-</nav>
+    <header class="hero">
+        <p class="hero-eyebrow">Portfolio</p>
+        <h1 class="glow-text">Misbah Fahamsyah</h1>
+        <div class="typing-wrap">
+            <span class="typing-label">—</span>
+            <span class="typing"></span>
+        </div>
+    </header>
 
-<section id="dynamic-content" class="glass fade-switch">
-    <h2>About Me</h2>
-    <p>
-        AI Engineer with 4+ years of experience building scalable AI & ML systems
-        from development to production. Experienced across AI Engineering,
-        Data Science, Data Engineering, and MLOps. Delivering intelligent,
-        production-ready solutions with measurable impact.
-    </p>
-</section>
+    <nav class="nav-links">
+        <a href="#" onclick="showProjects('company'); return false;">Company Projects</a>
+        <a href="#" onclick="showProjects('competition'); return false;">Competitions</a>
+        <a href="#" onclick="showProjects('thesis'); return false;">Thesis Research</a>
+        <a href="#" onclick="showProjects('academy'); return false;">Academy</a>
+        <a href="#" onclick="showProjects('certification'); return false;">Certifications</a>
+    </nav>
 
-<footer>
-    <p>© 2026 Misbah Fahamsyah</p>
-</footer>
+    <section id="dynamic-content" class="fade-switch" style="max-width:1100px;margin:48px auto;padding:0 28px;transition:opacity 0.3s ease,transform 0.3s ease;">
+        <!-- filled by JS -->
+    </section>
+
+    <footer>
+        <p>© 2026 Misbah Fahamsyah &nbsp;·&nbsp; AI Engineer</p>
+    </footer>
+
+</div><!-- /page-wrap -->
 
 <script src="data.js"></script>
 <script src="script.js"></script>
