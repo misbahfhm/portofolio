@@ -144,7 +144,9 @@ Improved authentication security and fraud prevention by reliably detecting spoo
         responsibilities: "Led the end-to-end development and deployment of a liveness detection system, covering model development, inference engine implementation, UI design, backend API integration, and full on-premise deployment.",
         skills: "Computer Vision, Data Science, Machine Learning, Frontend & Backend Development",
         tools: "OpenCV, Python, FastAPI",
-        evidence: []
+        evidence: [
+            "assets/company/xquisite_analitika_indonesia/Security/liveness-detection.png"
+        ]
     },
 
     {
