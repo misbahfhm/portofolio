@@ -176,7 +176,7 @@ Enhanced detection accuracy, improved training efficiency, and ensured stable, s
     },
 
     {
-        type: "company",
+        type: "poc",
         title: "Dynamic-Class Classification",
         overview: `
 Overview:
@@ -285,7 +285,7 @@ Improved efficiency, reduced model redundancy, and enabled scalable multi-task l
     },
 
     {
-        type: "company",
+        type: "poc",
         title: "Computer Vision Smart Crawler",
         overview: `
 Overview:
@@ -312,8 +312,8 @@ Enabled scalable, layout-aware web data extraction across news, ticketing, and e
     },
 
     {
-        type: "company",
-        title: "Computer Vision Smart Crawler",
+        type: "poc",
+        title: "Mobbile OCR",
         overview: `
 Overview:
 Mobile-accessible OCR application enabling users to capture images via mobile devices and extract text through an AI-powered backend service.
