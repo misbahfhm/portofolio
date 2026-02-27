@@ -99,7 +99,7 @@ Enabled scalable, 24/7 automated customer support, improved response consistency
         type: "poc",
         title: "Generative Avatar AI",
         overview: `
-verview:
+Overview:
 Generative Avatar AI is a multimodal AI-powered finance assistant that delivers domain-specific knowledge through a realistic digital avatar, combining Generative AI, voice modeling, and video synthesis for interactive user experiences.
 
 Problem:
@@ -114,7 +114,7 @@ Enabled an interactive, human-like AI finance assistant capable of delivering ac
         role: "AI Engineer",
         field: "Finance",
         duration: "February 2025 – March 2025",
-        responsibilities: "...",
+        responsibilities: "Designed and implemented the full lifecycle of the Generative Avatar AI system, including automated data crawling, end-to-end data pipeline development, model fine-tuning for video and voice generation in on-premise environments, and orchestration of a multimodal pipeline transforming user input into synchronized AI-driven avatar responses.",
         skills: "Generative AI, Multimodal LLMs, AI Engineering, Prompt Engineering, Data Engineering, Model Fine-Tuning, Speech Processing",
         tools: "Azure OpenAI, LangChain, Transformers, PyTorch, F5-TTS, Qdrant, PostgreSQL, Python, MuseTalk, FastAPI",
         evidence: [
@@ -122,18 +122,222 @@ Enabled an interactive, human-like AI finance assistant capable of delivering ac
         ]
     },
 
-    // {
-    //     type: "company",
-    //     title: "Nama Project",
-    //     overview: `...`,
-    //     role: "...",
-    //     field: "...",
-    //     role_description: "...",
-    //     responsibilities: "...",
-    //     skills: "...",
-    //     tools: "...",
-    //     evidence: []
-    // },
+    {
+        type: "poc",
+        title: "Liveness Detection",
+        overview: `
+Overview:
+Computer vision–based liveness detection system to determine whether a person in a video frame is real or a spoof attempt.
+
+Problem:
+Authentication systems were vulnerable to spoofing methods such as printed photos, replay attacks, and deepfake videos, increasing fraud risk.
+
+Delivered Solution:
+Developed an end-to-end liveness detection solution including a trained detection model, inference engine, backend APIs, and user interface, fully deployed in an on-premise environment.
+
+Impact:
+Improved authentication security and fraud prevention by reliably detecting spoofing attempts in real-time application scenarios.        
+        `,
+        role: "AI Engineer",
+        field: "Security",
+        duration: "January 2025 - February 2025",
+        responsibilities: "Led the end-to-end development and deployment of a liveness detection system, covering model development, inference engine implementation, UI design, backend API integration, and full on-premise deployment.",
+        skills: "Computer Vision, Data Science, Machine Learning, Frontend & Backend Development",
+        tools: "OpenCV, Python, FastAPI",
+        evidence: []
+    },
+
+    {
+        type: "company",
+        title: "Generative AI Detection Optimization",
+        overview: `
+Overview:
+Optimization project aimed at improving the accuracy, reliability, and production readiness of Generative AI detection models.
+
+Problem:
+Detection outputs from Generative AI models showed performance inconsistencies due to data quality issues, suboptimal fine-tuning, and limited production optimization.
+
+Delivered Solution:
+Built an automated data pipeline, performed structured data analysis and cleaning, fine-tuned a Small Language Model (SLM) using distributed multi-node multi-GPU training, and deployed the optimized model into production.
+
+Impact:
+Enhanced detection accuracy, improved training efficiency, and ensured stable, scalable model performance in real-world deployment environments.
+        `,
+        role: "AI Engineer",
+        field: "Media Intelligence",
+        duration: "October 2024 - November 2024",
+        responsibilities: "Led the end-to-end optimization lifecycle, including automated data collection, EDA and data preparation, distributed SLM fine-tuning in on-premise multi-GPU environments, performance evaluation, and production deployment.",
+        skills: "Generative AI, Model Fine-Tuning, Data Science, Data Engineering, Distributed Training, Deep Learning, Production Deployment",
+        tools: "PyTorch, Python, Qwen, vLLM, MLFlow, Pandas",
+        evidence: [
+            "assets/company/ebdesk_teknologi/Media_Intelligence/5w1h.png",
+            "assets/company/ebdesk_teknologi/Media_Intelligence/ner.png",
+        ]
+    },
+
+    {
+        type: "company",
+        title: "Dynamic-Class Classification",
+        overview: `
+Overview:
+Zero-Shot Text Classification system enabling scalable text categorization without heavy reliance on labeled datasets.
+
+Problem:
+Traditional text classification required extensive labeled data, limiting scalability and adaptability to new categories.
+
+Delivered Solution:
+Built an end-to-end pipeline covering automated data collection, data analysis and preparation, NLI-based zero-shot model fine-tuning, evaluation, and production deployment.
+
+Impact:
+Enabled flexible and scalable text classification with reduced labeling dependency while maintaining reliable performance in real-world applications.
+        `,
+        role: "AI Engineer",
+        field: "Media Intelligence",
+        duration: "September 2024 - September 2024",
+        responsibilities: "Executed the full ML lifecycle for a Zero-Shot Text Classification system, including automated data pipeline development, EDA and preprocessing, NLI-based model fine-tuning, performance evaluation, monitoring, and production deployment.",
+        skills: "Zero-Shot Text Classification, Natural Language Processing, Natural Language Inference, Model Fine-Tuning, Deep Learning",
+        tools: "PyTorch, Transformers, Pandas, MLFlow, FastAPI",
+        evidence: [
+            "assets/company/ebdesk_teknologi/Media_Intelligence/zero-shot.png",
+        ]
+    },
+
+    {
+        type: "company",
+        title: "Youtube News Realtime AI Extraction",
+        overview: `
+OOverview:
+Real-time AI-powered data pipeline for processing YouTube news videos and extracting structured information from streaming media content.
+
+Problem:
+News videos on YouTube are unstructured and lengthy, making it difficult to automatically identify relevant segments and extract actionable insights at scale.
+
+Delivered Solution:
+Built an end-to-end pipeline combining video parsing, scene classification fine-tuning, LLM-based information extraction, workflow orchestration with Airflow, and Elasticsearch indexing for scalable news intelligence.
+
+Impact:
+Enabled near real-time segmentation and structured extraction of news content from YouTube, improving media monitoring efficiency and searchability.
+        `,
+        role: "AI Engineer",
+        field: "Media Intelligence",
+        duration: "June 2024 - August 2024",
+        responsibilities: "Designed, fine-tuned, and deployed an end-to-end AI pipeline for YouTube news processing, including scene classification modeling, LLM-based information extraction, Airflow-based ingestion scheduling, Elasticsearch integration, and full production deployment.",
+        skills: "AI Engineering, Speech-to-Text, Data Enginering, Data Science, Deep Learning, LLM Integration, Pipeline Integration",
+        tools: "Whisper, LLM, Airflow, ElasticSearch, FastAPI, Kafka, MLFlow, Python.",
+        evidence: [
+            "assets/company/ebdesk_teknologi/Media_Intelligence/youtube-news.png"
+        ]
+    },
+    
+    {
+        type: "company",
+        title: "News Extraction Automation Tools",
+        overview: `
+Overview:
+End-to-end AI automation platform for large-scale media processing, covering scanned newspapers and TV broadcast news using computer vision, OCR, speech-to-text, and scalable data pipelines.
+
+Problem:
+Manual processing of printed and broadcast media was time-consuming, unstructured, and difficult to scale for real-time ingestion, search, and analytics.
+
+Delivered Solution:
+Built and deployed production-grade pipelines for layout detection, OCR-based text extraction, automated region cropping, and speech-to-text transcription, fully integrated with backend APIs, logging systems, and search infrastructure.
+
+Impact:
+Enabled near real-time media processing, structured content extraction, searchable indexing, and scalable automation across print and broadcast news workflows.
+        `,
+        role: "AI Engineer",
+        field: "Media Intelligence",
+        duration: "January 2024 - May 2024",
+        responsibilities: "Led the end-to-end development and production deployment of AI-driven media automation systems, including dataset engineering, layout detection fine-tuning, OCR and auto-cropping integration, speech-to-text deployment, backend API development, and scalable data pipeline orchestration with MongoDB, Kafka, and Elasticsearch.",
+        skills: "Computer Vision, AI Engineering, Speech-to-Text, Data Engineering, Image Processing, Audio Processing, Model Training, Model Fine-Tuning, AI Annotation Platform Engineering, Pipeline Integration.",
+        tools: "LabelStudio, Whisper, YOLO, ElasticSearch, Airflow, OCR, Docker, Kafka, MongoDB, MLFlow, OpenCV, FastAPI, Python",
+        evidence: [
+            "assets/company/ebdesk_teknologi/Media_Intelligence/newspaper-extraction.png",
+            "assets/company/ebdesk_teknologi/Media_Intelligence/newspaper-elasticsearch.png",
+        ]
+    },
+
+    {
+        type: "company",
+        title: "Multi-Task Model Classification",
+        overview: `
+Overview:
+Research and development project to build a transformer-based multi-task classification model capable of handling multiple classification objectives within a single unified architecture.
+
+Problem:
+Maintaining separate models for different classification tasks led to redundancy, higher resource consumption, and inconsistent representations across tasks.
+
+Delivered Solution:
+Designed a shared-encoder transformer architecture with task-specific output heads, supported by curated multi-source datasets and aligned preprocessing pipelines.
+
+Impact:
+Improved efficiency, reduced model redundancy, and enabled scalable multi-task learning with consistent shared representations across classification tasks.
+        `,
+        role: "AI Engineer",
+        field: "Media Intelligence",
+        duration: "January 2023 - April 2023",
+        responsibilities: "Led dataset curation and alignment, conducted EDA and preprocessing, and designed and implemented a transformer-based multi-task classification architecture with shared representations and task-specific outputs.",
+        skills: "Natural Language Processing, Transformers & Encoder Models, AI Engineering, Data Science, Model Architecture Design.",
+        tools: "Transformers, PyTorch, Pandas, Airflow, ElasticSearch, Kafka, MLFlow, FastAPI, Python",
+        evidence: [
+            "assets/company/ebdesk_teknologi/Media_Intelligence/multi-task-model-classification.png"
+        ]
+    },
+
+    {
+        type: "company",
+        title: "Computer Vision Smart Crawler",
+        overview: `
+Overview:
+Research-driven AI web crawling system leveraging Computer Vision and Document Layout Analysis to automatically extract structured information from diverse and dynamic websites.
+
+Problem:
+Websites across domains have heterogeneous and complex layouts, making rule-based scraping brittle, non-scalable, and difficult to generalize.
+
+Delivered Solution:
+Designed an AI-based crawling architecture combining adaptive screenshot capture, layout detection fine-tuning, OCR integration, and structured JSON extraction pipelines, supported by curated multi-domain datasets.
+
+Impact:
+Enabled scalable, layout-aware web data extraction across news, ticketing, and e-commerce platforms with improved robustness and automation compared to traditional scraping methods.
+        `,
+        role: "AI Engineer",
+        field: "Media Intelligence",
+        duration: "August 2022 - December 2022",
+        responsibilities: "Led the end-to-end research and development of an AI-powered web crawling system, including architecture design, dataset engineering, CV model fine-tuning for layout detection, OCR integration, structured data parsing, and UI development for result visualization.",
+        skills: "Computer Vision, Document Layout Analysis, Text Recognition (OCR), AI Engineering, Data Science, Automated Screenshot Crawling, Data Parsing",
+        tools: "YOLO, Detectron2, Selenium, Tesseract, Regex, PyTorch, OpenCV, MLFlow, FastAPI, Python, Streamlit",
+        evidence: [
+            "assets/company/ebdesk_teknologi/Media_Intelligence/computer-vision-smart-crawler.png"
+        ]
+    },
+
+    {
+        type: "company",
+        title: "Computer Vision Smart Crawler",
+        overview: `
+Overview:
+Mobile-accessible OCR application enabling users to capture images via mobile devices and extract text through an AI-powered backend service.
+
+Problem:
+Users required a lightweight and accessible solution to perform OCR directly from mobile devices without relying on third-party cloud services.
+
+Delivered Solution:
+Designed and implemented a mobile-to-backend OCR architecture, including an on-premise OCR API, real-time image processing pipeline, and a Kivy-based mobile application.
+
+Impact:
+Delivered a portable and self-hosted OCR solution with real-time text extraction capabilities suitable for practical, on-device usage scenarios.
+        `,
+        role: "AI Engineer",
+        field: "Media Intelligence",
+        duration: "March 2022 - July 2022",
+        responsibilities: "Designed and developed the end-to-end OCR system, covering system architecture, on-premise API deployment, Kivy-based mobile UI development, backend integration, and mobile application packaging for production use.",
+        skills: "Computer Vision, Optical Character Recognition (OCR), Mobile Application Development, API Development, Data Science",
+        tools: "FastAPI, Tesseract, Buildozer, Kivy, KivyMD, Python",
+        evidence: [
+            "assets/company/ebdesk_teknologi/Media_Intelligence/mobile-ocr_capture.png",
+            "assets/company/ebdesk_teknologi/Media_Intelligence/mobile-ocr_result.png",
+        ]
+    },
 
 
     /* ══════════════════════════════════════════
