@@ -705,6 +705,11 @@ footer {
     color: #fff;
 }
 
+.evidence-video-thumb .thumb-overlay {
+    opacity: 1 !important;
+    background: rgba(0, 0, 0, 0.3);
+}
+
 /* ─── RESPONSIVE ──────────────────────────────────────── */
 @media (max-width: 1024px) {
     .projects-grid { grid-template-columns: 1fr; }

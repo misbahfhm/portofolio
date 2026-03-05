@@ -119,6 +119,34 @@ Enabled an interactive, human-like AI finance assistant capable of delivering ac
         tools: "Azure OpenAI, LangChain, Transformers, PyTorch, F5-TTS, Qdrant, PostgreSQL, Python, MuseTalk, FastAPI",
         evidence: [
             "assets/company/xquisite_analitika_indonesia/Finance/avatar.png",
+            "assets/company/xquisite_analitika_indonesia/Finance/avatar_indo.mp4",
+        ]
+    },
+
+    {
+        type: "poc",
+        title: "HRIS AI Assistant",
+        overview: `
+Overview:
+Web-based HRIS AI assistant designed to help employees access HR-related information such as leave balances, medical claim status, and job vacancies through a self-service platform.
+
+Problem:
+Employees often needed to contact HR directly for routine inquiries, creating unnecessary workload and delays in accessing HR-related information.
+
+Delivered Solution:
+Developed a web-based HR system integrated with SQL databases, dashboard visualizations, and an AI chatbot capable of retrieving information from both structured HR data and internal knowledge documents.
+
+Impact:
+Reduced HR operational workload while improving employee access to real-time HR information through an intelligent self-service interface.
+        `,
+        role: "AI Engineer",
+        field: "Human Resources",
+        duration: "June 2025 - July 2025",
+        responsibilities: "Designed and developed the end-to-end HRIS AI assistant system, including web application development, SQL database design, dashboard visualization, knowledge ingestion pipelines, and AI chatbot integration with structured HR data and internal documents.",
+        skills: "AI Engineering, Prompt Engineering, Data Engineering, Full-stack Development, Information Extraction & Knowledge management, Vibe Coding",
+        tools: "Azure OpenAI, LangChain, Python, API Requests, PostgreSQL, Repl.it",
+        evidence: [
+            "assets/company/xquisite_analitika_indonesia/Manufacture/intera_hris.mp4",
         ]
     },
 
@@ -145,7 +173,8 @@ Improved authentication security and fraud prevention by reliably detecting spoo
         skills: "Computer Vision, Data Science, Machine Learning, Frontend & Backend Development",
         tools: "OpenCV, Python, FastAPI",
         evidence: [
-            "assets/company/xquisite_analitika_indonesia/Security/liveness-detection.png"
+            "assets/company/xquisite_analitika_indonesia/Security/liveness-detection.png",
+            "assets/company/xquisite_analitika_indonesia/Security/liveness-detection.mp4"
         ]
     },
 

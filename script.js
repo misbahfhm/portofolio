@@ -379,7 +379,32 @@ function openLightbox(images, idx) {
 }
 
 function renderLightbox() {
-    lightboxImg.src = lightboxImages[lightboxIndex];
+    const src = lightboxImages[lightboxIndex];
+    const isVideo = src.match(/\.(mp4|webm|ogg)$/i);
+    const container = document.querySelector(".lightbox-inner");
+
+    // Hapus elemen media sebelumnya
+    const old = document.getElementById("modalImage") || document.getElementById("modalVideo");
+    if (old) old.remove();
+
+    if (isVideo) {
+        const vid = document.createElement("video");
+        vid.id = "modalVideo";
+        vid.src = src;
+        vid.controls = true;
+        vid.autoplay = true;
+        vid.className = "lightbox-img"; // pakai style yang sama
+        vid.style.maxHeight = "80vh";
+        container.insertBefore(vid, container.querySelector(".lightbox-nav"));
+    } else {
+        const img = document.createElement("img");
+        img.id = "modalImage";
+        img.src = src;
+        img.className = "lightbox-img";
+        img.alt = "Evidence";
+        container.insertBefore(img, container.querySelector(".lightbox-nav"));
+    }
+
     lbCount.textContent = `${lightboxIndex + 1} / ${lightboxImages.length}`;
 }
 
@@ -430,23 +455,38 @@ const badgeMap = {
 function buildGallery(evidence, cls = "evidence-gallery") {
     if (!evidence || evidence.length === 0) return "";
 
-    const thumbs = evidence.map((img, i) => `
-        <div class="${cls === "cert-gallery" ? "cert-thumb" : "evidence-thumb"}" 
-             data-gallery-src="${img}" data-gallery-index="${i}">
-            <img src="${img}" alt="Evidence ${i + 1}" loading="lazy">
+    const thumbs = evidence.map((src, i) => {
+        const isVideo = src.match(/\.(mp4|webm|ogg)$/i);
+
+        if (isVideo) {
+            return `
+            <div class="${cls === "cert-gallery" ? "cert-thumb" : "evidence-thumb"} evidence-video-thumb"
+                 data-gallery-src="${src}" data-gallery-index="${i}" data-is-video="true">
+                <video src="${src}" muted playsinline preload="metadata"
+                       style="width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;"></video>
+                <div class="thumb-overlay video-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                         width="28" height="28">
+                        <circle cx="12" cy="12" r="10" fill="rgba(0,0,0,0.5)"/>
+                        <polygon points="10,8 16,12 10,16" fill="white"/>
+                    </svg>
+                </div>
+            </div>`;
+        }
+
+        return `
+        <div class="${cls === "cert-gallery" ? "cert-thumb" : "evidence-thumb"}"
+             data-gallery-src="${src}" data-gallery-index="${i}">
+            <img src="${src}" alt="Evidence ${i + 1}" loading="lazy">
             <div class="thumb-overlay">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
-                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
-                    <line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/>
-                </svg>
+                <!-- icon lama -->
             </div>
-        </div>
-    `).join("");
+        </div>`;
+    }).join("");
 
     return `
         <div class="evidence-section">
-            <div class="evidence-label">Evidence / Screenshots</div>
+            <div class="evidence-label">Evidence</div>
             <div class="${cls}">${thumbs}</div>
         </div>`;
 }
