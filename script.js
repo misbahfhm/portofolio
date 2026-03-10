@@ -1,18 +1,179 @@
 /* =========================
-   TYPING EFFECT
+   i18n TRANSLATIONS
 ========================= */
-const text = "AI Engineering • Data Science • MLOps";
-const typingElement = document.querySelector(".typing");
-let index = 0;
+const i18n = {
+    en: {
+        /* nav & hero */
+        portfolio:        "Portfolio",
+        aboutMe:          "About Me",
+        projects:         "Projects",
+        competitions:     "Competitions",
+        thesis:           "Thesis Research",
+        academy:          "Academy",
+        certifications:   "Certifications",
+        prev:             "Prev",
+        next:             "Next",
+        evidence:         "Evidence",
+        noEntries:        "No entries available yet.",
+        noCerts:          "No certifications added yet.",
+        langHint:         "🌐 Language",
+        topbarRole:       "AI Engineer",
 
-function typeEffect() {
-    if (index < text.length) {
-        typingElement.innerHTML += text.charAt(index);
-        index++;
-        setTimeout(typeEffect, 55);
+        /* typing text */
+        typingText: "AI Engineering • Data Science • MLOps",
+
+        /* about */
+        aboutTitle: "About Me",
+        aboutBody:  "AI Engineer with 4+ years of experience building scalable AI & ML systems from development to production. Experienced across AI Engineering, Data Science, Data Engineering, and MLOps. Delivering intelligent, production-ready solutions with measurable impact.",
+
+        /* section labels */
+        sectionProjects:     "Projects",
+        sectionCompetitions: "Competitions",
+        sectionThesis:       "Thesis Research",
+        sectionAcademy:      "Academy Programs",
+        sectionCerts:        "Certifications",
+
+        /* meta labels */
+        labelRole:             "Role",
+        labelField:            "Field",
+        labelDuration:         "Duration",
+        labelResponsibilities: "Responsibilities",
+        labelSkills:           "Skills",
+        labelTools:            "Tools",
+        labelAchievement:      "Achievement",
+        labelProposal:         "Proposal",
+        labelHeldBy:           "Held By",
+        labelMethods:          "Methods",
+        labelYear:             "Year",
+        labelLevel:            "Level",
+        labelInstitution:      "Institution",
+        labelObjectives:       "Objectives",
+        labelHighlights:       "Highlights",
+
+        /* badge labels */
+        badgeCompany:     "Company Project",
+        badgePoc:         "Proof of Concept",
+        badgeCompetition: "Competition",
+        badgeThesis:      "Thesis Research",
+        badgeAcademy:     "Academy",
+        badgeCert:        "Certification",
+    },
+
+    id: {
+        /* nav & hero */
+        portfolio:        "Portofolio",
+        aboutMe:          "Tentang Saya",
+        projects:         "Proyek",
+        competitions:     "Kompetisi",
+        thesis:           "Penelitian Tugas Akhir",
+        academy:          "Akademi",
+        certifications:   "Sertifikasi",
+        prev:             "Sebelum",
+        next:             "Berikut",
+        evidence:         "Bukti",
+        noEntries:        "Belum ada entri yang tersedia.",
+        noCerts:          "Belum ada sertifikasi yang ditambahkan.",
+        langHint:         "🌐 Bahasa",
+        topbarRole:       "AI Engineer",
+
+        /* typing text */
+        typingText: "AI Engineering • Data Science • MLOps",
+
+        /* about */
+        aboutTitle: "Tentang Saya",
+        aboutBody:  "AI Engineer dengan pengalaman 4+ tahun membangun sistem AI & ML yang skalabel dari tahap pengembangan hingga produksi. Berpengalaman di bidang AI Engineering, Data Science, Data Engineering, dan MLOps. Menghadirkan solusi cerdas siap produksi dengan dampak yang terukur.",
+
+        /* section labels */
+        sectionProjects:     "Proyek",
+        sectionCompetitions: "Kompetisi",
+        sectionThesis:       "Penelitian Tugas Akhir",
+        sectionAcademy:      "Program Akademi",
+        sectionCerts:        "Sertifikasi",
+
+        /* meta labels */
+        labelRole:             "Peran",
+        labelField:            "Bidang",
+        labelDuration:         "Durasi",
+        labelResponsibilities: "Tanggung Jawab",
+        labelSkills:           "Keahlian",
+        labelTools:            "Alat",
+        labelAchievement:      "Pencapaian",
+        labelProposal:         "Proposal",
+        labelHeldBy:           "Diselenggarakan Oleh",
+        labelMethods:          "Metode",
+        labelYear:             "Tahun",
+        labelLevel:            "Jenjang",
+        labelInstitution:      "Institusi",
+        labelObjectives:       "Tujuan",
+        labelHighlights:       "Sorotan",
+
+        /* badge labels */
+        badgeCompany:     "Proyek Perusahaan",
+        badgePoc:         "Proof of Concept",
+        badgeCompetition: "Kompetisi",
+        badgeThesis:      "Penelitian TA",
+        badgeAcademy:     "Akademi",
+        badgeCert:        "Sertifikasi",
+    }
+};
+
+/* active language */
+let lang = "en";
+
+function t(key) {
+    return (i18n[lang] && i18n[lang][key]) || i18n.en[key] || key;
+}
+
+function setLang(l) {
+    lang = l;
+
+    /* update toggle buttons */
+    document.getElementById("btnEN").classList.toggle("active", l === "en");
+    document.getElementById("btnID").classList.toggle("active", l === "id");
+
+    /* re-render all [data-i18n] static elements */
+    document.querySelectorAll("[data-i18n]").forEach(el => {
+        const key = el.getAttribute("data-i18n");
+        el.textContent = t(key);
+    });
+
+    /* restart typing effect */
+    restartTyping();
+
+    /* re-render current view */
+    if (currentView === "about") {
+        showAbout(true);
+    } else if (currentView) {
+        showProjects(currentView, true);
     }
 }
-window.onload = typeEffect;
+
+
+/* =========================
+   TYPING EFFECT
+========================= */
+let typingTimer   = null;
+let typingElement = null;
+
+function restartTyping() {
+    if (typingTimer) clearTimeout(typingTimer);
+    typingElement = document.querySelector(".typing");
+    if (!typingElement) return;
+    typingElement.textContent = "";
+    let index = 0;
+    const text = t("typingText");
+
+    function typeStep() {
+        if (index < text.length) {
+            typingElement.textContent += text.charAt(index);
+            index++;
+            typingTimer = setTimeout(typeStep, 55);
+        }
+    }
+    typeStep();
+}
+
+window.addEventListener("load", restartTyping);
 
 
 /* =========================
@@ -32,16 +193,14 @@ const COLORS = {
 const COLOR_LIST = Object.values(COLORS);
 
 function rgba(c, a) { return `rgba(${c[0]},${c[1]},${c[2]},${a})`; }
-function lerp(a, b, t) { return a + (b - a) * t; }
+function lerp(a, b, t2) { return a + (b - a) * t2; }
 function rand(min, max) { return Math.random() * (max - min) + min; }
 function randInt(min, max) { return Math.floor(rand(min, max + 1)); }
 function pickColor() { return COLOR_LIST[randInt(0, COLOR_LIST.length - 1)]; }
 
-
-/* ── Grid settings ───────────────────────────────────── */
-const CELL = 38;   // grid cell size in px
+const CELL = 38;
 let COLS, ROWS;
-let grid = [];     // grid[row][col] = node data
+let grid = [];
 
 function buildGrid() {
     COLS = Math.ceil(W / CELL) + 2;
@@ -53,8 +212,8 @@ function buildGrid() {
             grid[r][c] = {
                 x:       c * CELL,
                 y:       r * CELL,
-                active:  Math.random() < 0.55,   // whether this node is part of circuit
-                dot:     Math.random() < 0.18,   // solder dot
+                active:  Math.random() < 0.55,
+                dot:     Math.random() < 0.18,
                 color:   pickColor(),
             };
         }
@@ -62,9 +221,6 @@ function buildGrid() {
 }
 buildGrid();
 
-
-/* ── Trace segments (horizontal + vertical paths) ───── */
-// A trace goes from node A → node B along grid lines
 const traces = [];
 
 function buildTraces() {
@@ -96,15 +252,12 @@ function buildTraces() {
 }
 buildTraces();
 
-
-/* ── Signal pulses traveling along traces ────────────── */
 const signals = [];
 const MAX_SIGNALS = 55;
 
 class Signal {
     constructor() { this.spawn(); }
     spawn() {
-        // pick a random trace to travel on
         if (traces.length === 0) return;
         const tr   = traces[randInt(0, traces.length - 1)];
         this.x1    = tr.x1; this.y1 = tr.y1;
@@ -113,7 +266,7 @@ class Signal {
         this.speed = rand(0.004, 0.014);
         this.color = tr.color;
         this.size  = rand(2.5, 5);
-        this.tail  = rand(0.12, 0.28);   // tail length as fraction of trace
+        this.tail  = rand(0.12, 0.28);
         this.alive = true;
         this.glow  = rand(0.7, 1.0);
     }
@@ -124,13 +277,10 @@ class Signal {
     draw() {
         const head = Math.min(this.t, 1);
         const tail = Math.max(this.t - this.tail, 0);
-
         const hx = lerp(this.x1, this.x2, head);
         const hy = lerp(this.y1, this.y2, head);
         const tx = lerp(this.x1, this.x2, tail);
         const ty = lerp(this.y1, this.y2, tail);
-
-        // tail gradient line
         const grad = ctx.createLinearGradient(tx, ty, hx, hy);
         grad.addColorStop(0,   rgba(this.color, 0));
         grad.addColorStop(0.6, rgba(this.color, 0.35 * this.glow));
@@ -142,8 +292,6 @@ class Signal {
         ctx.moveTo(tx, ty);
         ctx.lineTo(hx, hy);
         ctx.stroke();
-
-        // glowing head dot
         if (this.t <= 1) {
             const g = ctx.createRadialGradient(hx, hy, 0, hx, hy, this.size * 3);
             g.addColorStop(0,   rgba(this.color, 0.9 * this.glow));
@@ -153,7 +301,6 @@ class Signal {
             ctx.arc(hx, hy, this.size * 3, 0, Math.PI * 2);
             ctx.fillStyle = g;
             ctx.fill();
-
             ctx.beginPath();
             ctx.arc(hx, hy, this.size * 0.55, 0, Math.PI * 2);
             ctx.fillStyle = rgba(this.color, this.glow);
@@ -164,12 +311,10 @@ class Signal {
 
 for (let i = 0; i < MAX_SIGNALS; i++) {
     const s = new Signal();
-    s.t = Math.random();   // stagger start
+    s.t = Math.random();
     signals.push(s);
 }
 
-
-/* ── Pulsing solder dots ─────────────────────────────── */
 const dots = [];
 
 function buildDots() {
@@ -190,10 +335,9 @@ function buildDots() {
 }
 buildDots();
 
-function drawDots(t) {
+function drawDots(f) {
     dots.forEach(d => {
-        const pulse = 0.25 + 0.2 * Math.sin(d.phase + t * 0.018);
-        // outer glow
+        const pulse = 0.25 + 0.2 * Math.sin(d.phase + f * 0.018);
         const g = ctx.createRadialGradient(d.x, d.y, 0, d.x, d.y, d.r * 5);
         g.addColorStop(0,   rgba(d.color, pulse * 0.5));
         g.addColorStop(1,   rgba(d.color, 0));
@@ -201,16 +345,13 @@ function drawDots(t) {
         ctx.arc(d.x, d.y, d.r * 5, 0, Math.PI * 2);
         ctx.fillStyle = g;
         ctx.fill();
-        // core
         ctx.beginPath();
         ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
-        ctx.fillStyle = rgba(d.color, 0.55 + 0.2 * Math.sin(d.phase + t * 0.018));
+        ctx.fillStyle = rgba(d.color, 0.55 + 0.2 * Math.sin(d.phase + f * 0.018));
         ctx.fill();
     });
 }
 
-
-/* ── Draw static traces ──────────────────────────────── */
 function drawTraces() {
     traces.forEach(tr => {
         ctx.beginPath();
@@ -223,17 +364,15 @@ function drawTraces() {
     });
 }
 
-
-/* ── Ambient glow blobs ──────────────────────────────── */
 const blobs = [
     { x: W * 0.15, y: H * 0.2,  r: 480, color: COLORS.violet, phase: 0    },
     { x: W * 0.85, y: H * 0.75, r: 420, color: COLORS.sky,    phase: 2.09 },
     { x: W * 0.5,  y: H * 0.5,  r: 380, color: COLORS.mint,   phase: 4.18 },
 ];
 
-function drawBlobs(t) {
+function drawBlobs(f) {
     blobs.forEach(b => {
-        const a = 0.028 + 0.012 * Math.sin(b.phase + t * 0.006);
+        const a = 0.028 + 0.012 * Math.sin(b.phase + f * 0.006);
         const g = ctx.createRadialGradient(b.x, b.y, 0, b.x, b.y, b.r);
         g.addColorStop(0,   rgba(b.color, a));
         g.addColorStop(0.5, rgba(b.color, a * 0.4));
@@ -245,8 +384,6 @@ function drawBlobs(t) {
     });
 }
 
-
-/* ── IC chip rectangles ──────────────────────────────── */
 const chips = [];
 
 function buildChips() {
@@ -257,23 +394,17 @@ function buildChips() {
         const ch = randInt(2, 4) * CELL;
         const cx = randInt(1, COLS - 5) * CELL;
         const cy = randInt(1, ROWS - 4) * CELL;
-        chips.push({
-            x: cx, y: cy, w: cw, h: ch,
-            color: pickColor(),
-            phase: rand(0, Math.PI * 2),
-        });
+        chips.push({ x: cx, y: cy, w: cw, h: ch, color: pickColor(), phase: rand(0, Math.PI * 2) });
     }
 }
 buildChips();
 
-function drawChips(t) {
+function drawChips(f) {
     chips.forEach(ch => {
-        const a = 0.08 + 0.04 * Math.sin(ch.phase + t * 0.012);
+        const a = 0.08 + 0.04 * Math.sin(ch.phase + f * 0.012);
         ctx.strokeStyle = rgba(ch.color, a);
         ctx.lineWidth   = 1;
         ctx.strokeRect(ch.x, ch.y, ch.w, ch.h);
-
-        // inner cross lines
         ctx.beginPath();
         ctx.strokeStyle = rgba(ch.color, a * 0.5);
         ctx.moveTo(ch.x + ch.w / 2, ch.y);
@@ -284,14 +415,11 @@ function drawChips(t) {
     });
 }
 
-
-/* ── HUD corners ─────────────────────────────────────── */
-function drawHUD(t) {
+function drawHUD(f) {
     const s = 40, m = 22;
-    const a = 0.3 + 0.08 * Math.sin(t * 0.025);
+    const a = 0.3 + 0.08 * Math.sin(f * 0.025);
     ctx.strokeStyle = rgba(COLORS.sky, a);
     ctx.lineWidth   = 1.2;
-
     [[m,m,1,1],[W-m,m,-1,1],[m,H-m,1,-1],[W-m,H-m,-1,-1]].forEach(([x,y,dx,dy]) => {
         ctx.beginPath();
         ctx.moveTo(x, y + dy * s);
@@ -305,29 +433,20 @@ function drawHUD(t) {
     });
 }
 
-
-/* ── Main loop ───────────────────────────────────────── */
 let frame = 0;
 
 function animate() {
     ctx.clearRect(0, 0, W, H);
-
     drawBlobs(frame);
     drawTraces();
     drawChips(frame);
     drawDots(frame);
-
-    // update & draw signals
     for (let i = signals.length - 1; i >= 0; i--) {
         signals[i].update();
         signals[i].draw();
-        if (!signals[i].alive) {
-            signals[i] = new Signal();   // respawn immediately
-        }
+        if (!signals[i].alive) { signals[i] = new Signal(); }
     }
-
     drawHUD(frame);
-
     frame++;
     requestAnimationFrame(animate);
 }
@@ -340,10 +459,7 @@ window.addEventListener("resize", () => {
     blobs[0].x = W * 0.15; blobs[0].y = H * 0.2;
     blobs[1].x = W * 0.85; blobs[1].y = H * 0.75;
     blobs[2].x = W * 0.5;  blobs[2].y = H * 0.5;
-    buildGrid();
-    buildTraces();
-    buildDots();
-    buildChips();
+    buildGrid(); buildTraces(); buildDots(); buildChips();
 });
 
 
@@ -367,7 +483,6 @@ let lightboxImages = [];
 let lightboxIndex  = 0;
 
 const imageModal  = document.getElementById("imageModal");
-const lightboxImg = document.getElementById("modalImage");
 const lbCount     = document.getElementById("lbCount");
 
 function openLightbox(images, idx) {
@@ -383,7 +498,6 @@ function renderLightbox() {
     const isVideo = src.match(/\.(mp4|webm|ogg)$/i);
     const container = document.querySelector(".lightbox-inner");
 
-    // Hapus elemen media sebelumnya
     const old = document.getElementById("modalImage") || document.getElementById("modalVideo");
     if (old) old.remove();
 
@@ -393,7 +507,7 @@ function renderLightbox() {
         vid.src = src;
         vid.controls = true;
         vid.autoplay = true;
-        vid.className = "lightbox-img"; // pakai style yang sama
+        vid.className = "lightbox-img";
         vid.style.maxHeight = "80vh";
         container.insertBefore(vid, container.querySelector(".lightbox-nav"));
     } else {
@@ -423,7 +537,6 @@ function closeLightbox() {
     document.body.style.overflow = "";
 }
 
-// keyboard nav
 document.addEventListener("keydown", (e) => {
     if (!imageModal.classList.contains("open")) return;
     if (e.key === "ArrowLeft")  lightboxPrev();
@@ -437,16 +550,18 @@ imageModal.addEventListener("click", (e) => {
 
 
 /* =========================
-   BADGE CONFIG
+   BADGE CONFIG  (dynamic, uses t())
 ========================= */
-const badgeMap = {
-    company:       { cls: "badge-company",       label: "Company Project" },
-    poc:           { cls: "badge-poc",            label: "Proof of Concept" },
-    competition:   { cls: "badge-competition",   label: "Competition"     },
-    thesis:        { cls: "badge-thesis",         label: "Thesis Research" },
-    academy:       { cls: "badge-academy",        label: "Academy"         },
-    certification: { cls: "badge-certification",  label: "Certification"   },
-};
+function getBadgeMap() {
+    return {
+        company:       { cls: "badge-company",     label: t("badgeCompany")     },
+        poc:           { cls: "badge-poc",          label: t("badgePoc")         },
+        competition:   { cls: "badge-competition", label: t("badgeCompetition") },
+        thesis:        { cls: "badge-thesis",       label: t("badgeThesis")      },
+        academy:       { cls: "badge-academy",      label: t("badgeAcademy")     },
+        certification: { cls: "badge-certification",label: t("badgeCert")        },
+    };
+}
 
 
 /* =========================
@@ -465,8 +580,7 @@ function buildGallery(evidence, cls = "evidence-gallery") {
                 <video src="${src}" muted playsinline preload="metadata"
                        style="width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;"></video>
                 <div class="thumb-overlay video-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                         width="28" height="28">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="28" height="28">
                         <circle cx="12" cy="12" r="10" fill="rgba(0,0,0,0.5)"/>
                         <polygon points="10,8 16,12 10,16" fill="white"/>
                     </svg>
@@ -478,15 +592,13 @@ function buildGallery(evidence, cls = "evidence-gallery") {
         <div class="${cls === "cert-gallery" ? "cert-thumb" : "evidence-thumb"}"
              data-gallery-src="${src}" data-gallery-index="${i}">
             <img src="${src}" alt="Evidence ${i + 1}" loading="lazy">
-            <div class="thumb-overlay">
-                <!-- icon lama -->
-            </div>
+            <div class="thumb-overlay"></div>
         </div>`;
     }).join("");
 
     return `
         <div class="evidence-section">
-            <div class="evidence-label">Evidence</div>
+            <div class="evidence-label">${t("evidence")}</div>
             <div class="${cls}">${thumbs}</div>
         </div>`;
 }
@@ -498,9 +610,7 @@ function buildGallery(evidence, cls = "evidence-gallery") {
 const revealObserver = new IntersectionObserver((entries) => {
     entries.forEach((entry, i) => {
         if (entry.isIntersecting) {
-            setTimeout(() => {
-                entry.target.classList.add("show");
-            }, i * 80);
+            setTimeout(() => { entry.target.classList.add("show"); }, i * 80);
         }
     });
 }, { threshold: 0.08 });
@@ -521,9 +631,8 @@ document.addEventListener("click", (e) => {
     if (thumb) {
         const container = thumb.closest(".evidence-gallery, .cert-gallery");
         if (!container) return;
-
         const allThumbs = [...container.querySelectorAll("[data-gallery-src]")];
-        const images    = allThumbs.map(t => t.dataset.gallerySrc);
+        const images    = allThumbs.map(t2 => t2.dataset.gallerySrc);
         const idx       = parseInt(thumb.dataset.galleryIndex, 10);
         openLightbox(images, idx);
     }
@@ -531,34 +640,36 @@ document.addEventListener("click", (e) => {
 
 
 /* =========================
-   SHOW PROJECTS FUNCTION
+   SHOW PROJECTS
 ========================= */
-let currentType = null;
+let currentView = null;
 
-function showProjects(type) {
-    // update nav active state
+function showProjects(type, noTransition) {
     document.getElementById("aboutBtn")?.classList.remove("active");
     document.querySelectorAll(".nav-links a").forEach(a => {
         a.classList.toggle("active", a.getAttribute("onclick")?.includes(`'${type}'`));
     });
 
-
     const section = document.getElementById("dynamic-content");
-    section.classList.add("fade-out");
 
-    setTimeout(() => {
+    const render = () => {
         section.innerHTML = "";
-
         if (type === "certification") {
             buildCertificationView(section);
         } else {
             buildProjectsView(type, section);
         }
-
         section.classList.remove("fade-out");
         applyReveal();
-        currentType = type;
-    }, 300);
+        currentView = type;
+    };
+
+    if (noTransition) {
+        render();
+    } else {
+        section.classList.add("fade-out");
+        setTimeout(render, 300);
+    }
 }
 
 /* ─── CERTIFICATIONS VIEW ──────────────────────────── */
@@ -567,12 +678,12 @@ function buildCertificationView(section) {
     const all   = certs.flatMap(c => c.evidence || []);
 
     let html = `<div class="section-header">
-        <h2>Certifications</h2>
+        <h2>${t("sectionCerts")}</h2>
         <div class="section-line"></div>
     </div>`;
 
     if (all.length === 0) {
-        html += "<p style='color:var(--muted)'>No certifications added yet.</p>";
+        html += `<p style='color:var(--muted)'>${t("noCerts")}</p>`;
     } else {
         html += `<div class="cert-gallery">`;
         all.forEach((img, i) => {
@@ -596,25 +707,26 @@ function buildCertificationView(section) {
 
 /* ─── PROJECTS VIEW ────────────────────────────────── */
 function buildProjectsView(type, section) {
-    const data = type === "company"
-    ? projectsData.filter(p => p.type === "company" || p.type === "poc")
-    : projectsData.filter(p => p.type === type);
+    const badgeMap = getBadgeMap();
 
-    const badge  = badgeMap[type] || { cls: "", label: type };
-    const labels = {
-        company:     "Projects",
-        competition: "Competitions",
-        thesis:      "Thesis Research",
-        academy:     "Academy Programs",
+    const data = type === "company"
+        ? projectsData.filter(p => p.type === "company" || p.type === "poc")
+        : projectsData.filter(p => p.type === type);
+
+    const sectionLabels = {
+        company:     t("sectionProjects"),
+        competition: t("sectionCompetitions"),
+        thesis:      t("sectionThesis"),
+        academy:     t("sectionAcademy"),
     };
 
     let html = `<div class="section-header">
-        <h2>${labels[type] || type}</h2>
+        <h2>${sectionLabels[type] || type}</h2>
         <div class="section-line"></div>
     </div>`;
 
     if (data.length === 0) {
-        html += "<p style='color:var(--muted)'>No entries available yet.</p>";
+        html += `<p style='color:var(--muted)'>${t("noEntries")}</p>`;
         section.innerHTML = html;
         return;
     }
@@ -622,63 +734,88 @@ function buildProjectsView(type, section) {
     html += `<div class="projects-grid">`;
 
     data.forEach(project => {
-        const cardBadge = badgeMap[project.type] || badge; 
+        /* pick localised content */
+        const lc        = (project.i18n && project.i18n[lang]) || {};
+        const cardBadge = badgeMap[project.type] || badgeMap.company;
+
+        const title           = lc.title           || project.title;
+        const overview        = lc.overview        || project.overview;
+        const role            = lc.role            || project.role;
+        const field           = lc.field           || project.field;
+        const duration        = lc.duration        || project.duration;
+        const responsibilities= lc.responsibilities|| project.responsibilities;
+        const skills          = lc.skills          || project.skills;
+        const tools           = project.tools;          /* tools stay the same */
+        const achievement     = lc.achievement     || project.achievement;
+        const proposal        = lc.proposal        || project.proposal;
+        const held_by         = lc.held_by         || project.held_by;
+        const methods         = lc.methods         || project.methods;
+        const year            = project.year;
+        const level           = lc.level           || project.level;
+        const institution     = lc.institution     || project.institution;
+        const objectives      = lc.objectives      || project.objectives;
+        const highlights      = lc.highlights      || project.highlights;
+
         html += `<div class="project-card">`;
         html += `<div class="card-badge ${cardBadge.cls}">${cardBadge.label}</div>`;
-        html += `<h3>${project.title}</h3>`;
+        html += `<h3>${title}</h3>`;
 
-        // ─ Company type
+        /* ─ Company / POC */
         if (type === "company") {
-            if (project.overview) {
-                const fmt = project.overview
-                    .replace(/Overview:/g, "<strong>Overview:</strong>")
-                    .replace(/Problem:/g, "<strong>Problem:</strong>")
+            if (overview) {
+                const fmt = overview
+                    .replace(/Overview:/g,          "<strong>Overview:</strong>")
+                    .replace(/Ikhtisar:/g,           "<strong>Ikhtisar:</strong>")
+                    .replace(/Problem:/g,            "<strong>Problem:</strong>")
+                    .replace(/Masalah:/g,            "<strong>Masalah:</strong>")
                     .replace(/Delivered Solution:/g, "<strong>Delivered Solution:</strong>")
-                    .replace(/Impact:/g, "<strong>Impact:</strong>")
+                    .replace(/Solusi yang Diberikan:/g,"<strong>Solusi yang Diberikan:</strong>")
+                    .replace(/Impact:/g,             "<strong>Impact:</strong>")
+                    .replace(/Dampak:/g,             "<strong>Dampak:</strong>")
                     .trim();
                 html += `<div class="overview-text">${fmt}</div>`;
             }
-            if (project.role)              html += metaRow("Role", project.role);
-            if (project.field)             html += metaRow("Field", project.field);
-            if (project.duration)          html += metaRow("Duration", project.duration);
-            if (project.responsibilities)  html += metaRow("Responsibilities", project.responsibilities);
-            if (project.skills)            html += metaRow("Skills", project.skills);
-            if (project.tools)             html += metaRow("Tools", project.tools);
+            if (role)              html += metaRow(t("labelRole"),             role);
+            if (field)             html += metaRow(t("labelField"),            field);
+            if (duration)          html += metaRow(t("labelDuration"),         duration);
+            if (responsibilities)  html += metaRow(t("labelResponsibilities"), responsibilities);
+            if (skills)            html += metaRow(t("labelSkills"),           skills);
+            if (tools)             html += metaRow(t("labelTools"),            tools);
         }
 
-        // ─ Competition type
+        /* ─ Competition */
         if (type === "competition") {
-            if (project.overview) html += `<div class="overview-text">${project.overview.trim()}</div>`;
-            if (project.duration)       html += metaRow("Duration", project.duration);
-            if (project.achievement)    html += metaRow("Achievement", `🏆 ${project.achievement}`);
-            if (project.proposal)       html += metaRow("Proposal", project.proposal);
-            if (project.held_by)        html += metaRow("Held By", project.held_by);
-            if (project.responsibilities) html += metaRow("Responsibilities", project.responsibilities);
-            if (project.methods)        html += metaRow("Methods", project.methods);
-            if (project.skills)         html += metaRow("Skills", project.skills);
-            if (project.tools)          html += metaRow("Tools", project.tools);
+            if (overview)           html += `<div class="overview-text">${overview.trim()}</div>`;
+            if (duration)           html += metaRow(t("labelDuration"),         duration);
+            if (achievement)        html += metaRow(t("labelAchievement"),      `🏆 ${achievement}`);
+            if (proposal)           html += metaRow(t("labelProposal"),          proposal);
+            if (held_by)            html += metaRow(t("labelHeldBy"),            held_by);
+            if (responsibilities)   html += metaRow(t("labelResponsibilities"),  responsibilities);
+            if (methods)            html += metaRow(t("labelMethods"),           methods);
+            if (skills)             html += metaRow(t("labelSkills"),            skills);
+            if (tools)              html += metaRow(t("labelTools"),             tools);
         }
 
-        // ─ Thesis type
+        /* ─ Thesis */
         if (type === "thesis") {
-            if (project.year)         html += metaRow("Year", project.year);
-            if (project.level)        html += metaRow("Level", project.level);
-            if (project.institution)  html += metaRow("Institution", project.institution);
-            if (project.objectives)   html += metaRow("Objectives", project.objectives);
-            if (project.skills)       html += metaRow("Skills", project.skills);
-            if (project.tools)        html += metaRow("Tools", project.tools);
+            if (year)         html += metaRow(t("labelYear"),        year);
+            if (level)        html += metaRow(t("labelLevel"),       level);
+            if (institution)  html += metaRow(t("labelInstitution"), institution);
+            if (objectives)   html += metaRow(t("labelObjectives"),  objectives);
+            if (skills)       html += metaRow(t("labelSkills"),      skills);
+            if (tools)        html += metaRow(t("labelTools"),       tools);
         }
 
-        // ─ Academy type
+        /* ─ Academy */
         if (type === "academy") {
-            if (project.overview)     html += `<div class="overview-text">${project.overview.trim()}</div>`;
-            if (project.duration)     html += metaRow("Duration", project.duration);
-            if (project.role)         html += metaRow("Role", project.role);
-            if (project.held_by)      html += metaRow("Held By", project.held_by);
-            if (project.highlights)   html += metaRow("Highlights", project.highlights);
+            if (overview)   html += `<div class="overview-text">${overview.trim()}</div>`;
+            if (duration)   html += metaRow(t("labelDuration"),   duration);
+            if (role)       html += metaRow(t("labelRole"),        role);
+            if (held_by)    html += metaRow(t("labelHeldBy"),      held_by);
+            if (highlights) html += metaRow(t("labelHighlights"),  highlights);
         }
 
-        // ─ Evidence gallery
+        /* ─ Evidence */
         if (project.evidence && project.evidence.length > 0) {
             html += `<div class="card-divider"></div>`;
             html += buildGallery(project.evidence, "evidence-gallery");
@@ -698,31 +835,38 @@ function metaRow(label, value) {
     </div>`;
 }
 
-function showAbout() {
-    // clear active dari nav
+
+/* =========================
+   SHOW ABOUT
+========================= */
+function showAbout(noTransition) {
     document.querySelectorAll(".nav-links a").forEach(a => a.classList.remove("active"));
-    // set active di tombol about
     document.getElementById("aboutBtn")?.classList.add("active");
 
     const section = document.getElementById("dynamic-content");
-    section.classList.add("fade-out");
 
-    setTimeout(() => {
+    const render = () => {
         section.innerHTML = `
             <div class="about-glass">
-                <h2>About Me</h2>
-                <p>AI Engineer with 4+ years of experience building scalable AI & ML systems
-                from development to production. Experienced across AI Engineering,
-                Data Science, Data Engineering, and MLOps. Delivering intelligent,
-                production-ready solutions with measurable impact.</p>
+                <h2>${t("aboutTitle")}</h2>
+                <p>${t("aboutBody")}</p>
             </div>`;
         section.classList.remove("fade-out");
-    }, 300);
+        currentView = "about";
+    };
+
+    if (noTransition) {
+        render();
+    } else {
+        section.classList.add("fade-out");
+        setTimeout(render, 300);
+    }
 }
 
+
 /* =========================
-   INIT — default About view
+   INIT
 ========================= */
 (function init() {
-    showAbout();
+    showAbout(true);
 })();

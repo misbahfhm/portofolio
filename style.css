@@ -43,7 +43,7 @@ body {
 /* ─── HERO ───────────────────────────────────────────── */
 .hero {
     text-align: center;
-    padding: 130px 24px 20px;
+    padding: 118px 24px 20px;
 }
 
 .hero-eyebrow {
@@ -96,12 +96,136 @@ body {
 
 @keyframes blink { 50% { border-color: transparent; } }
 
+/* ─── TOPBAR ──────────────────────────────────────────── */
+.topbar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 32px;
+    height: 52px;
+    background: rgba(3, 6, 15, 0.80);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    animation: slideDown 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes slideDown {
+    from { transform: translateY(-100%); opacity: 0; }
+    to   { transform: translateY(0);     opacity: 1; }
+}
+
+/* brand / left side */
+.topbar-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.topbar-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--sky);
+    box-shadow: 0 0 8px rgba(56,189,248,0.7);
+    animation: pulseDot 2.4s ease-in-out infinite;
+    flex-shrink: 0;
+}
+
+@keyframes pulseDot {
+    0%, 100% { box-shadow: 0 0 6px rgba(56,189,248,0.6); transform: scale(1); }
+    50%       { box-shadow: 0 0 14px rgba(56,189,248,0.9); transform: scale(1.25); }
+}
+
+.topbar-name {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    font-size: 0.9rem;
+    letter-spacing: 0.06em;
+    background: linear-gradient(90deg, #e0f2fe, var(--sky));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.topbar-title {
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    text-transform: uppercase;
+    padding-left: 10px;
+    border-left: 1px solid var(--border);
+}
+
+/* right side — lang switcher */
+.lang-switcher {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.lang-switcher-label {
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    user-select: none;
+    opacity: 0.7;
+}
+
+/* pill container */
+.lang-pill {
+    display: flex;
+    align-items: center;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 3px;
+    gap: 2px;
+}
+
+.lang-pill-btn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: none;
+    border: none;
+    color: var(--muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    padding: 4px 12px;
+    border-radius: 100px;
+    cursor: pointer;
+    transition: all 0.22s ease;
+    white-space: nowrap;
+}
+
+.lang-flag {
+    font-size: 0.85rem;
+    line-height: 1;
+}
+
+.lang-pill-btn:hover {
+    color: var(--text);
+}
+
+.lang-pill-btn.active {
+    background: rgba(56,189,248,0.14);
+    color: var(--sky);
+    box-shadow: 0 0 10px rgba(56,189,248,0.18);
+}
+
 /* ─── NAV ────────────────────────────────────────────── */
 .nav-links {
     display: flex;
     justify-content: center;
     gap: 10px;
-    margin: 50px auto 0;
+    margin: 22px auto 0;
     flex-wrap: wrap;
     padding: 0 24px;
     max-width: 860px;
@@ -162,7 +286,7 @@ body {
     backdrop-filter: blur(30px);
     border: 1px solid var(--border);
     border-radius: 24px;
-    padding: 40px 48px;        /* sebelumnya 64px 72px */
+    padding: 40px 48px;
     text-align: center;
     animation: fadeUp 1s ease forwards;
     position: relative;
@@ -341,7 +465,7 @@ body {
 
 .overview-text strong:first-child { margin-top: 0; }
 
-/* ─── STRUCTURED OVERVIEW (Problem / Solution / Impact) ── */
+/* ─── STRUCTURED OVERVIEW ── */
 .overview-text.structured {
     padding: 0;
     background: none;
@@ -398,7 +522,7 @@ body {
     line-height: 1.5;
 }
 
-/* ─── META BULLETS (Skills, Tools etc) ────────────────── */
+/* ─── META BULLETS ────────────────────────────────────── */
 .meta-row-col {
     flex-direction: column;
     gap: 6px;
@@ -505,7 +629,7 @@ body {
 
 .evidence-thumb:hover .thumb-overlay { opacity: 1; }
 
-/* ─── CERTIFICATION ONLY GALLERY ──────────────────────── */
+/* ─── CERTIFICATION GALLERY ──────────────────────────── */
 .cert-gallery {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -721,4 +845,6 @@ footer {
     #dynamic-content { padding: 0 18px; }
     .project-card { padding: 26px 22px; }
     .cert-gallery { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); }
+    .topbar { padding: 0 16px; }
+    .topbar-title, .lang-switcher-label { display: none; }
 }

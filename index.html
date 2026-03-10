@@ -15,9 +15,9 @@
     <div class="lightbox-inner">
         <img class="lightbox-img" id="modalImage" alt="Evidence">
         <div class="lightbox-nav">
-            <button class="lb-btn" onclick="lightboxPrev()">← Prev</button>
+            <button class="lb-btn" onclick="lightboxPrev()">← <span data-i18n="prev">Prev</span></button>
             <span class="lb-count" id="lbCount">1 / 1</span>
-            <button class="lb-btn" onclick="lightboxNext()">Next →</button>
+            <button class="lb-btn" onclick="lightboxNext()"><span data-i18n="next">Next</span> →</button>
         </div>
     </div>
 </div>
@@ -26,26 +26,44 @@
 
 <div class="page-wrap">
 
+    <!-- TOP BAR -->
+    <div class="topbar">
+        <div class="topbar-brand">
+            <span class="topbar-dot"></span>
+            <span class="topbar-name">MF</span>
+        </div>
+        <div class="lang-switcher">
+            <span class="lang-switcher-label" data-i18n="langHint">Language</span>
+            <div class="lang-pill">
+                <button class="lang-pill-btn active" id="btnEN" onclick="setLang('en')">
+                    <span class="lang-flag">🇬🇧</span>EN
+                </button>
+                <button class="lang-pill-btn" id="btnID" onclick="setLang('id')">
+                    <span class="lang-flag">🇮🇩</span>ID
+                </button>
+            </div>
+        </div>
+    </div>
+
     <header class="hero">
-        <p class="hero-eyebrow">Portfolio</p>
+        <p class="hero-eyebrow" data-i18n="portfolio">Portfolio</p>
         <h1 class="glow-text">Misbah Fahamsyah</h1>
         <div class="typing-wrap">
             <span class="typing-label">—</span>
             <span class="typing"></span>
         </div>
 
-        <!-- ← tambahkan ini -->
         <div class="hero-about-btn">
-            <a href="#" onclick="showAbout(); return false;" id="aboutBtn">About Me</a>
+            <a href="#" onclick="showAbout(); return false;" id="aboutBtn" data-i18n="aboutMe">About Me</a>
         </div>
     </header>
 
     <nav class="nav-links">
-        <a href="#" onclick="showProjects('company'); return false;">Projects</a>
-        <a href="#" onclick="showProjects('competition'); return false;">Competitions</a>
-        <a href="#" onclick="showProjects('thesis'); return false;">Thesis Research</a>
-        <a href="#" onclick="showProjects('academy'); return false;">Academy</a>
-        <a href="#" onclick="showProjects('certification'); return false;">Certifications</a>
+        <a href="#" onclick="showProjects('company'); return false;" data-i18n="projects">Projects</a>
+        <a href="#" onclick="showProjects('competition'); return false;" data-i18n="competitions">Competitions</a>
+        <a href="#" onclick="showProjects('thesis'); return false;" data-i18n="thesis">Thesis Research</a>
+        <a href="#" onclick="showProjects('academy'); return false;" data-i18n="academy">Academy</a>
+        <a href="#" onclick="showProjects('certification'); return false;" data-i18n="certifications">Certifications</a>
     </nav>
 
     <section id="dynamic-content" class="fade-switch">
