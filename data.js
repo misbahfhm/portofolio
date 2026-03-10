@@ -41,7 +41,7 @@ Improved deployment reliability, reduced manual intervention, and enabled scalab
                 title: "Voyager",
                 overview: `
 Ikhtisar:
-Voyager adalah man-month project untuk meningkatkan efisiensi operasional di XLSmart dengan mengotomatiskan alur kerja analitik dan mengintegrasikan sistem machine learning ke lingkungan produksi.
+Voyager adalah man-month project untuk meningkatkan efisiensi operasional di perusahaan client dengan mengotomatiskan alur kerja analitik dan mengintegrasikan sistem machine learning ke lingkungan produksi.
 
 Masalah:
 Tugas operasional dan proses analitik masih dilakukan sebagian secara manual, menciptakan hambatan dan membatasi skalabilitas inisiatif ML.
